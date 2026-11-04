@@ -1,0 +1,375 @@
+:root {
+  --paper: #ffffff;
+  --ink: #9f281d;
+  --ink-soft: #92554a;
+  --cobalt: #d83c2d;
+  --vermilion: #bd3728;
+  --acid: #f7c3b5;
+  --line: transparent;
+  /* 展示体改用 Fraunces Black：真实 900 字重，字形自带性格（wonk 终端）。
+     Instrument Serif 仍注册着，供需要轻盈气质的小字回退使用。 */
+  --serif: "Fraunces", Georgia, serif;
+  --serif-light: "Instrument Serif", Georgia, serif;
+  --sans: "Manrope", Arial, sans-serif;
+  --gutter: clamp(1rem, 2.6vw, 2.2rem);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 400;
+  line-height: 1.75;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+  cursor: grab;
+}
+#stage:active { cursor: grabbing; }
+
+/* ---------------- 品牌 ---------------- */
+
+.masthead {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 6;
+  padding: var(--gutter);
+}
+
+.masthead__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+  color: inherit;
+}
+.masthead__brand::before {
+  display: none;
+}
+.masthead__name {
+  font-family: var(--sans);
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+}
+.masthead__studio {
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+/* ---------------- 章节导航 ---------------- */
+
+.nav {
+  position: fixed;
+  z-index: 6;
+  left: var(--gutter);
+  bottom: var(--gutter);
+}
+.nav__list { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+.nav__btn {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.66rem 1rem;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+}
+.nav__btn:hover { background: var(--acid); color: var(--ink); }
+.nav__btn:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
+.nav__btn.is-active {
+  color: var(--paper);
+  background: var(--cobalt);
+}
+.nav__no { font-family: var(--sans); font-size: 0.65rem; font-weight: 500; color: var(--ink-soft); }
+.nav__btn.is-active .nav__no { color: var(--paper); }
+
+/* ---------------- 方位指示 ---------------- */
+
+.readout {
+  position: fixed;
+  z-index: 6;
+  right: var(--gutter);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  text-align: right;
+  pointer-events: none;
+}
+.readout__no {
+  font-family: var(--serif);
+  font-size: 2.7rem;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--cobalt);
+}
+.readout__name {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.readout__hint {
+  margin-top: 0.3rem;
+  font-size: 0.6rem;
+  letter-spacing: 0;
+  color: var(--ink-soft);
+  max-width: 5rem;
+}
+
+/* ---------------- 阅读入口 ---------------- */
+
+.tools {
+  position: fixed;
+  z-index: 6;
+  right: var(--gutter);
+  bottom: var(--gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.55rem;
+}
+.btn {
+  padding: 0.7rem 1.2rem;
+  border: 0;
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.btn:hover { background: var(--acid); color: var(--ink); }
+.btn:focus-visible { outline: 2px solid var(--vermilion); outline-offset: 2px; }
+.tools__foot {
+  font-size: 0.6rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+}
+
+/* ---------------- 阅读抽屉 ---------------- */
+
+.drawer {
+  position: fixed;
+  z-index: 8;
+  top: 0; right: 0; bottom: 0;
+  width: min(30rem, 92vw);
+  padding: clamp(1.4rem, 3vw, 2.6rem);
+  background: rgba(255, 255, 255, 0.97);
+  border-left: 1px solid var(--line);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.drawer[hidden] { display: none; }
+
+.drawer__head { position: relative; padding-right: 2.4rem; margin-bottom: 1.4rem; }
+.drawer__kicker {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  color: var(--vermilion);
+}
+.drawer__title {
+  margin-top: 0.4rem;
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 2.7rem;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.drawer__close {
+  position: absolute;
+  top: -0.4rem; right: 0;
+  width: 2rem; height: 2rem;
+  border: 0;
+  border-radius: 50%;
+  background: #fbeae4;
+  color: var(--ink);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.drawer__close:hover { border-color: var(--cobalt); color: var(--cobalt); }
+
+.drawer__body { font-size: 0.95rem; line-height: 1.65; color: var(--ink); }
+.drawer__body p + p { margin-top: 0.9rem; }
+.drawer__list { list-style: none; margin-top: 1.3rem; display: grid; gap: 0.9rem; }
+.drawer__item { background: #fff3ef; border-radius: 4px; padding: 0.9rem 1rem; }
+.drawer__itemKey { font-family: var(--sans); font-size: 0.95rem; font-weight: 600; letter-spacing: -0.02em; }
+.drawer__itemText { margin-top: 0.3rem; color: var(--ink-soft); font-size: 0.9rem; }
+.drawer__closing {
+  margin-top: 1.5rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+  /* 收尾短句是 1rem 的小字，Fraunces 只有静态 900 实例，写 700 也仍是 Black，
+     在 390 宽的手机阅读面板里笔画挤成一团。改用 Manrope 的真实 500 字重。 */
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--vermilion);
+}
+.drawer__note { margin-top: 1.4rem; font-size: 0.74rem; color: var(--ink-soft); }
+
+.projectBtn {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr;
+  align-items: baseline;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 0;
+  border-radius: 4px;
+  background: #fff3ef;
+  color: inherit;
+  font-family: var(--sans);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.projectBtn:hover { background: #f7d7cb; }
+.projectBtn:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
+.projectBtn__no { font-family: var(--serif); font-size: 1.1rem; font-style: italic; color: var(--vermilion); }
+.projectBtn__name { font-family: var(--sans); font-size: 0.95rem; font-weight: 600; letter-spacing: -0.02em; }
+.projectBtn__type { grid-column: 2; font-size: 0.72rem; color: var(--ink-soft); }
+
+/* ---------------- 作品详情 ---------------- */
+
+.detail {
+  position: fixed;
+  z-index: 9;
+  width: min(34rem, 92vw);
+  padding: clamp(1.6rem, 3.2vw, 2.8rem);
+  border: 0;
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.detail::backdrop { background: rgba(76, 25, 18, 0.32); }
+.detail__close {
+  position: absolute;
+  top: 0.7rem; right: 0.7rem;
+  width: 2rem; height: 2rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--acid);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.detail__close:hover { border-color: var(--cobalt); color: var(--cobalt); }
+.detail__kicker { font-size: 0.68rem; letter-spacing: 0.22em; color: var(--vermilion); }
+.detail__title {
+  margin: 0.4rem 0 0.2rem;
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 2.8rem;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+.detail__type { font-size: 0.78rem; letter-spacing: 0.16em; color: var(--cobalt); }
+.detail__lede { margin-top: 1.1rem; font-size: 0.95rem; line-height: 1.65; }
+.detail__sect { margin-top: 1.4rem; }
+.detail__sect h3 {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 1.02rem;
+  letter-spacing: -0.02em;
+}
+.detail__sect p { margin-top: 0.4rem; font-size: 0.9rem; line-height: 1.65; color: var(--ink-soft); }
+.detail__foot { margin-top: 1.6rem; font-size: 0.72rem; color: var(--ink-soft); }
+
+/* ---------------- 滚动驱动 ---------------- */
+
+.scroll-space { position: relative; z-index: 2; height: 620vh; pointer-events: none; }
+
+.noscript {
+  position: fixed; inset: auto 0 0 0; z-index: 10;
+  padding: 1rem var(--gutter);
+  background: var(--ink); color: var(--paper);
+  font-size: 0.8rem; text-align: center;
+}
+
+/* ---------------- 移动端 ---------------- */
+
+@media (max-width: 860px) {
+  /* 底部改成固定三层，互不重叠：
+     第一层 章节导航（恒定两行三列，不随宽度变化）
+     第二层 阅读本页（独占一行）
+     第三层 方位指示
+     此前导航按内容宽度排布，430px 宽时五项恰好一行，
+     右下角的「阅读本页」会直接压住「05 索引」。 */
+  .nav {
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: var(--gutter);
+  }
+  .nav__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+  }
+  .nav__btn {
+    justify-content: center;
+    font-size: 0.74rem;
+    padding: 0.36rem 0.5rem;
+  }
+
+  .tools {
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: calc(var(--gutter) + 4.9rem); /* 让开导航两行 */
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.7rem;
+  }
+  .tools__foot { display: none; }
+
+  .readout {
+    top: auto;
+    bottom: calc(var(--gutter) + 7.8rem); /* 让开导航两行 + 阅读一行 */
+    right: var(--gutter);
+    transform: none;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .readout__name, .readout__hint { writing-mode: horizontal-tb; }
+  .readout__no { font-size: 1.4rem; }
+  .readout__hint { display: none; }
+
+  .drawer { width: 100vw; border-left: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav__btn, .btn { transition: none; }
+}

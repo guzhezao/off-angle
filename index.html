@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <link rel="preload" href="./fonts/manrope.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="./fonts/instrument-serif.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="./fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="./fonts/fraunces-black-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="./fonts/fraunces-black-italic.woff2" as="font" type="font/woff2" crossorigin />
+    <meta
+      name="description"
+      content="OFF/ANGLE — an imagined independent design studio for identities that move, spaces that speak, and interactions that make you look twice. One sculpture. Five points of view."
+    />
+    <title>OFF/ANGLE — A different point of view.</title>
+  </head>
+
+  <body>
+    <canvas id="stage" aria-hidden="true"></canvas>
+
+    <!-- 固定 DOM：只做品牌、章节导航、方位指示与阅读入口 -->
+    <header class="masthead">
+      <a class="masthead__brand" href="#home" data-goto="0">
+        <span class="masthead__name">OFF/ANGLE</span>
+        <span class="masthead__studio">Independent by design</span>
+      </a>
+    </header>
+
+    <nav class="nav" aria-label="Explore the studio">
+      <ol class="nav__list" id="navList"></ol>
+    </nav>
+
+    <div class="readout" aria-live="polite">
+      <span class="readout__no" id="readoutNo">01</span>
+      <span class="readout__name" id="readoutName">Start</span>
+      <span class="readout__hint" id="readoutHint">A different point of view</span>
+    </div>
+
+    <div class="tools">
+      <button type="button" class="btn" id="readBtn" aria-expanded="false" aria-controls="drawer">
+        Read the story
+      </button>
+      <span class="tools__foot">Imagined studio. Real curiosity.</span>
+    </div>
+
+    <!-- 阅读抽屉：与三维母图同源，供真实阅读与手机端使用 -->
+    <aside class="drawer" id="drawer" hidden>
+      <div class="drawer__head">
+        <p class="drawer__kicker" id="drawerKicker"></p>
+        <h2 class="drawer__title" id="drawerTitle"></h2>
+        <button type="button" class="drawer__close" id="drawerClose" aria-label="Close reading panel">×</button>
+      </div>
+      <div class="drawer__body" id="drawerBody"></div>
+    </aside>
+
+    <!-- 作品详情 -->
+    <dialog class="detail" id="detail">
+      <button type="button" class="detail__close" id="detailClose" aria-label="Close project">×</button>
+      <div class="detail__body" id="detailBody"></div>
+    </dialog>
+
+    <div class="scroll-space" aria-hidden="true"></div>
+
+    <noscript><p class="noscript">Enable JavaScript to explore the interactive sculpture.</p></noscript>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
